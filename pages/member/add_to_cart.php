@@ -24,33 +24,47 @@ if ($quantity <= 0) {
 // Check if the product exists
 $sql_check_product = "SELECT * FROM products WHERE product_id = ?";
 $stmt = $conn->prepare($sql_check_product);
+if (!$stmt) {
+    die("Error preparing statement: " . $conn->error);
+}
 $stmt->bind_param("i", $product_id);
 $stmt->execute();
 $result = $stmt->get_result();
+$stmt->close(); // Close statement before reusing
 
 if ($result->num_rows === 0) {
     die("Error: Product not found.");
 }
 
 // Check if the product is already in the cart
-$sql_check_cart = "SELECT quantity FROM shopping_cart WHERE email = ? AND product_id = ?";
+$sql_check_cart = "SELECT quantity FROM shopping_cart WHERE user_email = ? AND product_id = ?";
 $stmt = $conn->prepare($sql_check_cart);
+if (!$stmt) {
+    die("Error preparing statement: " . $conn->error);
+}
 $stmt->bind_param("si", $user_email, $product_id);
 $stmt->execute();
 $result = $stmt->get_result();
+$stmt->close(); // Close statement before reusing
 
 if ($result->num_rows > 0) {
     // Update quantity if product exists in cart
     $row = $result->fetch_assoc();
     $new_quantity = $row['quantity'] + $quantity;
 
-    $sql_update = "UPDATE shopping_cart SET quantity = ? WHERE email = ? AND product_id = ?";
+    $sql_update = "UPDATE shopping_cart SET quantity = ? WHERE user_email = ? AND product_id = ?";
     $stmt = $conn->prepare($sql_update);
+    if (!$stmt) {
+        die("Error preparing statement: " . $conn->error);
+    }
     $stmt->bind_param("isi", $new_quantity, $user_email, $product_id);
 } else {
     // Insert new item into cart
-    $sql_insert = "INSERT INTO shopping_cart (email, product_id, quantity) VALUES (?, ?, ?)";
+    $sql_insert = "INSERT INTO shopping_cart (user_email, product_id, quantity) VALUES (?, ?, ?)";
     $stmt = $conn->prepare($sql_insert);
+    if (!$stmt) {
+        die("Error preparing statement: " . $conn->error);
+    }
     $stmt->bind_param("sii", $user_email, $product_id, $quantity);
 }
 
