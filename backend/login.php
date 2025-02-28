@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <?php
-    require 'database.php';
+    require '../database.php';
 
     session_start();
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -19,7 +19,8 @@
             $sql_check_pwd = "SELECT * from users where email = '$email' and password = '$password'";
             $result_check_pwd = $conn->query($sql_check_pwd);
             if ($result_check_pwd->num_rows > 0) {
-                echo "Logged in";
+                $_SESSION['email'] = $email;
+                echo "{$email}: Logged in";
             }
             else {
                 echo "Incorrect password.";

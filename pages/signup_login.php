@@ -8,12 +8,11 @@
         <meta name="viewport"
         content="width=device-width, initial-scale=1.0">
         <title>Testing3</title>
-        <script src="js/validation.js" defer></script>
+        <script src="../js/validation.js" defer></script>
 
     </head>
 
     <body>
-        <header></header>
         <?php
         if (isset($_SESSION['error_exist'])) {
             echo "<p style='color:red;'>".$_SESSION['error_exist']."</p>";
@@ -36,6 +35,9 @@
                 <input type="password" id="password" name="password">
                 <span id="pwd_error1" style="color:red;"></span>
                 <span id="pwd_error2" style="color:red;"></span>
+                <br><br>
+                <input type="checkbox" id="remember" name="remember"><label for="remember">Remember Me</label>
+                <a href="" class="forgot">Forgot Password?</a>
                 <br><br>
                 <button type="submit">Submit</button>
                 <button type="reset">Cancel</button>
