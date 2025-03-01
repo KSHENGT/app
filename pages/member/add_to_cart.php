@@ -1,6 +1,8 @@
 <?php
 session_start();
-include($_SERVER['DOCUMENT_ROOT'] . '/database.php'); // Correct absolute path to database connection
+
+// Correct path to database.php based on your project structure
+require_once __DIR__ . '/../../database.php'; 
 
 // Check if user is logged in
 if (!isset($_SESSION['email'])) {
